@@ -18,5 +18,6 @@ requires "importScripts" feature, which is currently supported by major browsers
 - Remove Physijs.scripts.ammo
 
 requires adding "Content-Type: application/wasm wasm" if you want to use ammo.wasm.wasm binary file.
+
 requires "Worker import" feature, which is currently supported by Edge or Chrome. 
 https://caniuse.com/?search=import%3A%20Available%20in%20workers
