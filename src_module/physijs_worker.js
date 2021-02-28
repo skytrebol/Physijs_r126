@@ -1,5 +1,10 @@
 'use strict';
 
+import * as _Ammo from '../examples/js/ammo-wasm.js';
+var Ammo = _Ammo.init;
+var worker_ready = 0;
+
+
 var	transferableMessage = self.webkitPostMessage || self.postMessage,
 	
 	// enum
@@ -72,6 +77,7 @@ var	transferableMessage = self.webkitPostMessage || self.postMessage,
 
 	CONSTRAINTREPORT_ITEMSIZE = 6, // constraint id, offset object, offset, applied impulse
 	constraintreport;
+
 
 
 var ab = new ArrayBuffer( 1 );
@@ -208,7 +214,8 @@ createShape = function( description ) {
 			var ptr = Ammo._malloc(4 * description.xpts * description.ypts * 4);
 
 			for (var f = 0; f < description.points.length; f++) {
-				Ammo.setValue(ptr + f,  description.points[f]  , 'float');
+				Ammo.HEAPF32[(ptr>>2) + (f * 1)] = description.points[f];
+				//Ammo.setValue(ptr + f,  description.points[f]  , 'float');
 			}
 
 			shape = new Ammo.btHeightfieldTerrainShape(
@@ -244,9 +251,21 @@ createShape = function( description ) {
 
 public_functions.init = function( params ) {
 
-    importScripts( params.ammo );
+    //importScripts( params.ammo );
+    const asm_check = (ms)=>{
+	return new Promise((resolve, reject) => {
+	    setTimeout(() => {
+		if ( ! Ammo.asm ) {
+		    reject(ms);
+		} else {
+		    resolve("success!");
+		}
+	    }, ms);
+	});
+    };
+    Promise.all([asm_check(50)])
+	.then(result => {
 
-	    
 	_transform = new Ammo.btTransform();
 	_vec3_1 = new Ammo.btVector3(0,0,0);
 	_vec3_2 = new Ammo.btVector3(0,0,0);
@@ -310,6 +329,9 @@ public_functions.init = function( params ) {
 
 	transferableMessage({ cmd: 'worldReady' });
 
+	worker_ready = 1;
+
+    } ).catch(err => {console.log("Fatal: Ammo.asm is not ready after promise.all.",err);} );
 
     return 0;
 };
@@ -433,9 +455,10 @@ public_functions.addVehicle = function( description ) {
 	vehicle.tuning = vehicle_tuning;
 
 	//_objects[ description.rigidBody ].setCollisionFlags( 2 ); //CF_KINEMATIC_OBJECT
-	_objects[ description.rigidBody ].setActivationState( 4 );
+	_objects[ description.rigidBody ].setActivationState( 4 ); //never sleep
 	vehicle.setCoordinateSystem( 0, 1, 2 );
-	world.addVehicle( vehicle );
+	//world.addVehicle( vehicle );
+	world.addAction( vehicle );
 
 	_vehicles[ description.id ] = vehicle;
 };
@@ -505,7 +528,6 @@ public_functions.applyEngineForce = function( details ) {
 };
 
 public_functions.removeObject = function( details ) {
-
 	world.removeRigidBody( _objects[details.id] );
 	Ammo.destroy(_objects[details.id]);
 	Ammo.destroy(_motion_states[details.id]);
@@ -1414,7 +1436,25 @@ self.onmessage = function( event ) {
 	
 
     if ( event.data.cmd && public_functions[event.data.cmd] ) {
+	if( worker_ready == 0 && event.data.cmd != "init" ){
+	    const worker_check = (ms)=>{
+		return new Promise((resolve, reject) => {
+		    setTimeout(() => {
+			if (! worker_ready ) {
+			    reject(ms);
+			} else {
+			    resolve("success!");
+			}
+		    }, ms);
+		});
+	    };
+            Promise.all([worker_check(50)])
+		.then(result => {
+			public_functions[event.data.cmd]( event.data.params );
+		} ).catch(err => {console.log("Fatal: Worker is not ready after promise.all.",err);} );
+	}else{
 	    public_functions[event.data.cmd]( event.data.params );
+	}
     }
 	
 };

@@ -93,7 +93,7 @@
 		light.shadow.camera.near = 20;
 		light.shadow.camera.far = 400;
 		light.shadow.bias = -.0001
-		light.shadow.napSize.width = light.shadow.mapSize.height = 2048;
+		light.shadow.mapSize.width = light.shadow.mapSize.height = 2048;
 		scene.add( light );
 
 
@@ -160,7 +160,7 @@
 		let size_rate = 20;
 		let _size = 6/size_rate;
 		let _vb = 2;
-		let _vh = -8;
+		let _vh = -5;
 		let suspention = 4.8 - _vh; //max:5 - vh
 		var mesh = new Physijs.BoxMesh(
 		    new THREE.CubeGeometry( 25/size_rate, (60+_vh)/size_rate, 143/size_rate ),
@@ -176,7 +176,7 @@
 		    0.28,
 		    500,
 		    10.5,
-		    6000
+		    3000
 		));
 		scene.add( vehicle );
 
