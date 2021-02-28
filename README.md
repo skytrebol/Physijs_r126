@@ -9,12 +9,12 @@
 
 ### src_classic: using Classic Worker ####
 
-requires "importScripts" feature which is currently supported by major browsers such as IE, Edge, Firefox, Chrome, Safari and Opera. 
+requires "importScripts" feature, which is currently supported by major browsers such as IE, Edge, Firefox, Chrome, Safari and Opera. 
 
 
 ### src_module: using Module Worker ####
 - Supports latest ammo.wasm.js which is used by babylon.js.
 - Supports addAction()
 
-requires "Worker import" feature which is currently supported by Edge or Chrome. 
+requires "Worker import" feature, which is currently supported by Edge or Chrome. 
 https://caniuse.com/?search=import%3A%20Available%20in%20workers
