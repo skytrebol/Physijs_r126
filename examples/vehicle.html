@@ -123,8 +123,8 @@
 		var NoiseGen = new SimplexNoise;
 
 		var ground_geometry = new THREE.PlaneGeometry( 300, 300, 100, 100 );
-		for ( var i = 0; i < ground_geometry.vertices.length; i++ ) {
-			var vertex = ground_geometry.vertices[i];
+		for ( var i = 0; i < ground_geometry.attributes.position.count; i++ ) {
+			var vertex = ground_geometry.attributes.position[i];
 			//vertex.y = NoiseGen.noise( vertex.x / 30, vertex.z / 30 ) * 1;
 		}
 		ground_geometry.computeFaceNormals();
@@ -163,7 +163,7 @@
 		let _vh = -5;
 		let suspention = 4.8 - _vh; //max:5 - vh
 		var mesh = new Physijs.BoxMesh(
-		    new THREE.CubeGeometry( 25/size_rate, (60+_vh)/size_rate, 143/size_rate ),
+		    new THREE.BoxGeometry( 25/size_rate, (60+_vh)/size_rate, 143/size_rate ),
 		    new THREE.MeshBasicMaterial( { color: 0xf0f000,  wireframe: true} ),
 		    50
 		);
