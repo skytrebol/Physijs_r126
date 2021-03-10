@@ -29,6 +29,9 @@ window.Physijs = (function() {
 		VEHICLEREPORT_ITEMSIZE = 9,
 		CONSTRAINTREPORT_ITEMSIZE = 6;
 
+    Physijs.CF_STATIC_OBJECT = 1;
+    Physijs.CF_KINEMATIC_OBJECT = 2;
+
     var //CollisionFlags for setCollisionFlags
     CF_STATIC_OBJECT = 1,
     CF_KINEMATIC_OBJECT = 2,
