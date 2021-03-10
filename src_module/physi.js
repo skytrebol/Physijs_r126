@@ -894,14 +894,17 @@ window.Physijs = (function() {
 
 				// Check for scaling
 				var mass_scaling = new THREE.Vector3( 1, 1, 1 );
+				if(! object._physijs.width_default ){ object._physijs.width_default = object._physijs.width; }
+				if(! object._physijs.height_default ){ object._physijs.height_default = object._physijs.height; }
+				if(! object._physijs.depth_default ){ object._physijs.depth_default = object._physijs.depth; }
 				if ( object._physijs.width ) {
-					object._physijs.width *= object.scale.x;
+					object._physijs.width = object._physijs.width_default * object.scale.x;
 				}
 				if ( object._physijs.height ) {
-					object._physijs.height *= object.scale.y;
+					object._physijs.height = object._physijs.height_default * object.scale.y;
 				}
 				if ( object._physijs.depth ) {
-					object._physijs.depth *= object.scale.z;
+					object._physijs.depth = object._physijs.depth_default * object.scale.z;
 				}
 
 				this.execute( 'addObject', object._physijs );
