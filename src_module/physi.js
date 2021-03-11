@@ -31,6 +31,9 @@ window.Physijs = (function() {
 
     Physijs.CF_STATIC_OBJECT = 1;
     Physijs.CF_KINEMATIC_OBJECT = 2;
+    Physijs.CF_NO_CONTACT_RESPONSE = 4;
+    Physijs.CF_CUSTOM_MATERIAL_CALLBACK = 8;
+    Physijs.CF_CHARACTER_OBJECT = 16;
 
     var //CollisionFlags for setCollisionFlags
     CF_STATIC_OBJECT = 1,
